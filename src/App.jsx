@@ -5,7 +5,7 @@ import MobileNav from "./components/MobileNav";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setBannerData } from "./store/slice";
+import { setBannerData, setImgURL } from "./store/slice";
 
 function App() {
   const dispatch = useDispatch();
@@ -20,8 +20,18 @@ function App() {
     }
   };
 
+  const fetchConfiguration = async () => {
+    try {
+      const response = await axios("/configuration");
+      dispatch(setImgURL(response.data.images.secure_base_url + "original"));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchTrending();
+    fetchConfiguration();
   }, []);
 
   return (
